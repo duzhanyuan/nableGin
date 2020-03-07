@@ -32,13 +32,13 @@ func (admin *LoginController) GetLogin(ctx *gin.Context) {
 	v := viewdata.Default(ctx)
 
 	////如果已经登陆
-	//userid := session.Get("userid")
-	//if userid != nil {
-	//	session.AddFlash( "您已经登陆系统")
-	//	session.Save()
-	//	ctx.Redirect(http.StatusSeeOther, "/admin/dash/index")//跳转
-	//	return
-	//}
+	userid := session.Get("userid")
+	if userid != nil {
+		session.AddFlash( "您已经登陆系统")
+		session.Save()
+		ctx.Redirect(http.StatusSeeOther, "/admin/dash/index")//跳转
+		return
+	}
 
 	////从闪存中获取消息
 	flashes := session.Flashes()
