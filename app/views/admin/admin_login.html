@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{.AdminTitle}}</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/plugins/login/style.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/plugins/login/dark.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/plugins/login/font-icons.css" type="text/css" />
+    <!-- Sweet Alert -->
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/plugins/login/animate.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/plugins/login/magnific-popup.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/plugins/login/responsive.css" type="text/css" />
+
+</head>
+
+<body class="stretched">
+
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper" class="clearfix">
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+
+        <div class="content-wrap nopadding">
+
+            <div class="section nopadding nomargin" style="width: 100%; height: 100%; position: absolute; left: 0; top: 0; background: url('/static/img/login_bg{{.bgnum}}.jpg') center center no-repeat; background-size: cover;"></div>
+
+            <div class="section nobg full-screen nopadding nomargin">
+                <div class="container-fluid vertical-middle divcenter clearfix">
+
+
+                    <div class="card divcenter noradius noborder" style="max-width: 400px; background-color: rgba(255,255,255,0.93);">
+                        <div class="card-body" style="padding: 40px;">
+                            <form class="m-t" role="form" action="/admin/login" method="post" enctype="multipart/form-data">
+                                <input class="hide" name="_csrf" value="{{.Token}}" />
+                                <h3>欢迎登录Nable Pro</h3>
+
+                                <div class="col_full">
+                                    <label for="login-form-username">用户名:</label>
+                                    <input type="text" id="username" name="username" value="admin" class="form-control not-dark" />
+                                </div>
+
+                                <div class="col_full">
+                                    <label for="login-form-password">密码:</label>
+                                    <input type="text" id="password" name="password" value="123456" class="form-control not-dark" />
+                                </div>
+
+                                <div class="col_full">
+                                    <label for="captcha">验证码:</label>
+                                    <input type="text" id="captcha" name="captcha" value="" class="form-control not-dark" />
+                                    <div style="position: absolute;right:0;bottom:2px"><img src="/admin/login/captcha/" height="33" onclick="this.src='/admin/login/captcha?='+Math.random()"  /></div>
+                                </div>
+
+                                <div class="col_full nobottommargin">
+                                    <button type="submit" class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" value="login">登陆</button>
+                                </div>
+                            </form>
+
+                            <div class="line line-sm"></div>
+
+                            <div class="center">
+                                <h4>开箱即用的中台后端管理/设计解决方案</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="center dark mt-3"><small>Copyright</strong> Nable Pro &copy; 2016-2020</small><small> 上海腾岩信息科技有限公司</small></div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section><!-- #content end -->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="icon-angle-up"></div>
+
+{{if .flashes}}
+    <div id="success_info" class="hide">
+        {{ range $f := .flashes }}
+            <div>{{ $f }}</div>
+        {{ end }}
+    </div>
+{{end}}
+
+<!-- External JavaScripts
+============================================= -->
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/css/plugins/login/plugins.js"></script>
+<!-- Sweet alert -->
+<script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+<!-- Footer Scripts
+============================================= -->
+<script src="/static/css/plugins/login/functions.js"></script>
+<script>
+    $(document).ready(function() {
+
+        //验证错误提醒
+        if($('#error_validate').length>0){
+            swal({
+                title: "",
+                text: $('#error_validate').html(),
+                html: true
+            });
+        }
+        //消息提醒
+        if($('#success_info').length>0){
+            swal({
+                title: "",
+                text: $('#success_info').html(),
+                html: true
+            });
+        }
+
+    });
+</script>
+</body>
+</html>
