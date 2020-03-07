@@ -1,5 +1,5 @@
 server_port: 8088
-log_path: runtime/logs/web_%Y%m%d.log
+log_path: runtime/logs/
 
 mysql_dsn: nablegin:123456@tcp(127.0.0.1:3306)/nablegin?charset=utf8&parseTime=true&loc=Local
 mysql_max_idle: 10

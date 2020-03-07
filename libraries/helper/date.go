@@ -6,6 +6,18 @@ import (
 
 
 
+//获取当前年月日
+func DateYmdFormat() string {
+	tm := time.Now()
+	return tm.Format("2006-01-02")
+}
+
+//获取年月日时分秒（字符串类型）
+func DateNowFormatStr() string {
+	tm := time.Now()
+	return tm.Format("2006-01-02 15:04:05")
+}
+
 func Date(fmt string, date interface{}) string {
 	return dateInZone(fmt, date, "Local")
 }

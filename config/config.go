@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"nable.gin/libraries/helper"
 
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -13,8 +14,6 @@ import (
 
 var (
 	Conf        *conf        // 静态配置
-	DynamicConf *dynamicConf // 动态配置
-
 	_path       string
 
 )
@@ -35,11 +34,6 @@ type conf struct {
 	AdminTitle string   `yaml:"admin_title"`
 }
 
-// 动态配置，程序运行过程中，可以动态更改的参数配置
-type dynamicConf struct {
-	UserDefaultName string `yaml:"user_default_name"`
-	UserDefaultAge  int    `yaml:"user_default_age"`
-}
 
 // 初始化解析参数
 func init() {
@@ -66,14 +60,12 @@ func InitConfig() error {
 		return err
 	}
 
+
+	timedate := helper.DateYmdFormat()
+	Conf.LogPath = string(Conf.LogPath)+"gin_"+string(timedate)+".log"
+
 	fmt.Printf("static config => [%#v]\n", Conf)
 
-	DynamicConf = &dynamicConf{}
-	if err := yaml.Unmarshal(content, DynamicConf); err != nil {
-		return err
-	}
-
-	fmt.Printf("dynamic config => [%#v]\n", DynamicConf)
 
 	return nil
 }

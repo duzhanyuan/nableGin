@@ -30,12 +30,12 @@ func main() {
 	fmt.Print("StartRedis Success!!!\n")
 
 	//初始化数据库
-	fmt.Print("DB Init...\r")
+	fmt.Print("MysqlDB Init...\r")
 	app.Migrations()
-	fmt.Print("DB Init Success!!!\n")
+	fmt.Print("MysqlDB Init Success!!!\n")
 
-	// 开始运行iris框架
-	fmt.Print("RunIris...\r")
+	// 开始运行GIN框架
+	fmt.Print("RunGin...\r")
 	app.RunGin(Conf.ServerPort)
 
 }

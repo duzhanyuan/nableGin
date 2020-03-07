@@ -11,6 +11,7 @@ import (
 	"nable.gin/libraries/helper"
 	"net/http"
 	"os"
+	"io"
 	"os/signal"
 	"strconv"
 	"time"
@@ -24,6 +25,15 @@ import (
 
 
 func RunGin(port int) {
+
+	//启动日志
+	// 禁用控制台颜色，将日志写入文件时不需要控制台颜色。
+	//gin.DisableConsoleColor()
+	f, _ := os.Create(Conf.LogPath)// 记录到文件。
+	//gin.DefaultWriter = io.MultiWriter(f) //记录到文件
+	// 如果需要同时将日志写入文件和控制台，请使用以下代码。
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+
 
 	app := gin.Default()
 	//注册session，redis存储
