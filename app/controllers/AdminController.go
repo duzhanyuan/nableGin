@@ -7,17 +7,10 @@ import (
 	"net/http"
 )
 
-type AdminController struct {
-}
-
-func (admin *AdminController) Router(engine *gin.Engine) {
-	engine.GET("/admin/dash/index", admin.Index)
-	engine.GET("/admin/logout", admin.Logout)
-}
 
 
 //登陆页 admin.Login
-func (admin *AdminController) Index(ctx *gin.Context) {
+func Index(ctx *gin.Context) {
 	session := sessions.Default(ctx)
 	v := viewdata.Default(ctx)
 
@@ -36,7 +29,7 @@ func (admin *AdminController) Index(ctx *gin.Context) {
  * 请求类型：Get
  * 请求url：admin/logout
  */
-func (admin *AdminController) Logout(ctx *gin.Context)  {
+func Logout(ctx *gin.Context)  {
 
 	session := sessions.Default(ctx)
 	session.Delete("username")

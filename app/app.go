@@ -15,9 +15,7 @@ import (
 	"strconv"
 	"time"
 	"html/template"
-	"github.com/casbin/casbin/v2"
-	redisadapter "github.com/casbin/redis-adapter/v2"
-	cm "nable.gin/libraries/casbin"
+
 
 )
 
@@ -37,27 +35,9 @@ func RunGin(port int) {
 	store, _ := redis.NewStore(10, "tcp", Conf.RedisAddr, "", []byte("secret"))
 	app.Use(sessions.Sessions("GinSession", store))
 
-	//CASBIN权限配置
-	//配置casbin权限数据同步到REDIS
-	adp := redisadapter.NewAdapter("tcp", Conf.RedisAddr)
-	var Enforcer, _ = casbin.NewEnforcer("casbin.conf", adp)
-	//设置初始权限 默认ADMIN用户拥有所有权限
-	Enforcer.LoadPolicy()
-	Enforcer.AddPolicy("anonymous", "/", "GET")
-	Enforcer.AddPolicy("anonymous", "/static/*", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login/captcha", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login", "POST")
-	Enforcer.AddPolicy("admin", "/*", "*")
-	if err := Enforcer.SavePolicy(); err != nil {
-		panic(err)
-	}
-	//设置权限中间件
-	casbinMiddleware := cm.New(Enforcer)
 
 	//全局使用CSRF中间件,权限中间件
-	app.Use(csrf.Middleware(),casbinMiddleware.ServeHTTP())
+	app.Use(csrf.Middleware())
 
 	//视图模板自定义处理函数
 	app.SetFuncMap(template.FuncMap{

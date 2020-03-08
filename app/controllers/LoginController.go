@@ -14,19 +14,10 @@ import (
 	Hash "nable.gin/libraries/helper"
 )
 
-type LoginController struct {
-}
-
-func (admin *LoginController) Router(engine *gin.Engine) {
-	engine.GET("/admin/login", admin.GetLogin)
-	engine.POST("/admin/login", admin.PostLogin)
-	engine.GET("/admin/login/captcha", admin.Captcha)
-
-}
 
 
 //登陆页 admin.Login
-func (admin *LoginController) GetLogin(ctx *gin.Context) {
+func GetLogin(ctx *gin.Context) {
 
 	session := sessions.Default(ctx)
 	v := viewdata.Default(ctx)
@@ -66,7 +57,7 @@ func (admin *LoginController) GetLogin(ctx *gin.Context) {
 
 
 //登陆 admin.Login
-func (admin *LoginController) PostLogin(ctx *gin.Context) {
+func PostLogin(ctx *gin.Context) {
 
 	session := sessions.Default(ctx)
 
@@ -132,7 +123,7 @@ func (admin *LoginController) PostLogin(ctx *gin.Context) {
 
 
 //验证码 admin.Captcha
-func (admin *LoginController) Captcha(ctx *gin.Context) {
+func Captcha(ctx *gin.Context) {
 
 	//验证码ID
 	captchaId := captcha.NewLen(4)
