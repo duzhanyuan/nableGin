@@ -48,5 +48,10 @@ func (a *BasicAuthorizer) CheckPermission(r *http.Request,username string) bool 
 
 // RequirePermission returns the 403 Forbidden to the client
 func (a *BasicAuthorizer) RequirePermission(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("username")
+	session.Delete("userid")
+	session.Save()//删除登陆的ID
+	c.HTML(http.StatusNotFound, "403.html", gin.H{})
 	c.AbortWithStatus(403)
 }

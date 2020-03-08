@@ -4,7 +4,7 @@ import (
 	. "nable.gin/config"
 	"github.com/casbin/casbin/v2"
 	redisadapter "github.com/casbin/redis-adapter/v2"
-	middleware "nable.gin/app/middleware"
+	Middleware "nable.gin/app/middleware"
 	"github.com/gin-gonic/gin"
 	"nable.gin/app/controllers"
 	"net/http"
@@ -49,7 +49,7 @@ func registerRouter(router *gin.Engine) {
 
 	//路由组设置
 	admin := router.Group("/admin")
-	admin.Use(middleware.NewAuthorizer(Enforcer))//使用权限验证中间件
+	admin.Use(Middleware.NewAuthorizer(Enforcer))//使用权限验证中间件
 	{
 		//dash面板首页
 		admin.GET("/dash/index", controllers.Index)
