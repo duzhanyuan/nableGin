@@ -57,10 +57,21 @@ func registerRouter(router *gin.Engine) {
 		//退出登陆 /admin/logout
 		admin.GET("/logout", controllers.Logout)
 
-		// 嵌套路由组 登陆控制层 /admin/login
+		// 嵌套路由组
+		// 登陆控制层 /admin/login
 		login := admin.Group("login")
 		login.GET("/", controllers.GetLogin)
 		login.POST("/", controllers.PostLogin)
+
+		// 用户管理控制层 /admin/user
+		user := admin.Group("user")
+		user.GET("/user", controllers.User)//列表
+		user.GET("/add", controllers.Add)//新增用户
+		user.POST("/store", controllers.Store)//提交新增用户
+		user.POST("/del", controllers.Del)//软删除用户
+		user.POST("/status", controllers.Status)//禁用/启用 用户状态切换
+		user.GET("/edit/:id", controllers.EditBy)//用户编辑界面
+		user.POST("/put", controllers.EditPut)//编辑提交
 
 
 

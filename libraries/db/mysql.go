@@ -22,7 +22,7 @@ func StartMysql(dsn string, maxIdle, maxOpen int) (err error){
 		mysqlDB.DB().SetMaxOpenConns(maxOpen)
 		mysqlDB.DB().SetConnMaxLifetime(time.Duration(30) * time.Minute)
 		//mysqlDB.SingularTable(true) 生成表名尾部不加S
-		//mysqlDB.LogMode(true)// 启用Logger，显示SQL详细日志
+		mysqlDB.LogMode(true)// 启用Logger，显示SQL详细日志
 	}
 
 	return

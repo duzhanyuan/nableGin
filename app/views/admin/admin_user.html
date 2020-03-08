@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.AdminTitle}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                {{template "menu.html" .}}
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    {{template "welcometip.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "profile.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "messages.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "tips.html" .}}
+                </li>
+                <li>
+                    <a href="/admin/logout">
+                        <i class="fa fa-sign-out"></i> 注销
+                    </a>
+                </li>
+                <li>
+                    <a class="right-sidebar-toggle">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>用户列表</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/index">主页</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a>用户管理</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>用户列表</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>用户列表页</h5>
+
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-3">
+
+                                    <form role="form" id="form-serarch" action="" method="get">
+                                    <div class="input-group">
+                                        <input placeholder="请输入搜索内容" type="text" class="form-control form-control-sm" name="search" id="search"> <span class="input-group-append"> <button type="submit" class="btn btn-sm btn-primary">搜索!
+                                    </button></span>
+                                    </div>
+                                </form>
+
+                                </div>
+                                <div class="col-sm-9 text-right">
+                                    <a href="/admin/user/add" type="button" class="btn btn-w-m btn-primary"><i class="fa fa-plus"></i>　新增用户</a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>姓名</th>
+                                        <th>用户名 </th>
+                                        <th>邮箱</th>
+                                        <th>手机号</th>
+                                        <th>状态</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $i, $v := .Userlist}}
+                                    <tr id="uid{{$v.ID}}">
+                                        <td>{{ add $i 1}}</td>
+                                        <td>{{$v.Truename}}</td>
+                                        <td>{{$v.Username}}</td>
+                                        <td>{{$v.Email}}</td>
+                                        <td>{{$v.Mobile}}</td>
+                                        <td>
+                                            {{ if eq $.userid $v.ID}}
+                                              <btn class="label label-success" disable>正常</btn>
+                                            {{else}}
+                                                {{ if eq $v.IsActive 1}}
+                                                    <btn class="label label-primary btn-status" uid="{{$v.ID}}" active="0">正常</btn>
+                                                {{else}}
+                                                    <btn class="label label-warning btn-status" uid="{{$v.ID}}" active="1">禁用</btn>
+                                                {{end}}
+                                            {{end}}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="/admin/user/edit/{{$v.ID}}" class="btn-white btn btn-sm">编辑</a>
+                                            <button uid="{{$v.ID}}" class="btn-white btn btn-sm btn-del" >删除</button>
+
+                                        </td>
+                                    </tr>
+                                    {{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <ul id="pagination-navi" class="pagination"></ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            {{template "footer.html" .}}
+
+        </div>
+
+
+        </div>
+        {{template "sidebar.html" .}}
+        </div>
+
+    {{/* 闪存消息 */}}
+    {{template "flashes.html" .}}
+
+    <!-- Mainly scripts -->
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/js/custom-plugin.js"></script>
+    <script src="/static/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Sweet alert -->
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- pagination -->
+    <script src="/static/js/plugins/pagination/jquery.twbsPagination.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let csrf = "{{.Token}}"
+
+            $('#pagination-navi').twbsPagination({
+                totalPages: {{.TotalPage}},//总页数
+                startPage: {{.Page}},//当前页码
+                onPageClick: function (event, page) {
+                    window.location.href='?page='+page;
+                }
+            });
+
+
+            //搜索表单提交前验证
+            $("#form-serarch").submit(function(e){
+                let search=$('#search').val();
+                if($.trim(search)==''){
+                    swal({
+                        title: "",
+                        text:'搜索的内容不能为空。',
+                        html: true
+                    });
+                    return false;
+                }
+            });
+
+            //激活用户 || 禁止用户
+            $('.btn-status').click(function (e) {
+                let url='/admin/user/status';
+                let uid=$(this).attr('uid');
+                let active=$(this).attr('active');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: {id:uid,active:active,_csrf:csrf},
+                    dataType: 'json'
+                }).then(({status})=>{
+                    if(status==0){
+                        window.location.reload();
+                    }else{
+                        swal({title: "",text:'系统保留用户，禁用失败。'});
+                    }
+                });
+                // jquery取消默认事件
+                return false;
+            });
+
+            //删除用户提醒
+            $('.btn-del').click(function () {
+                let id = $(this).attr('uid');
+                let url='/admin/user/del';
+                swal({
+                    title: "你确定？",
+                    text: "你将无法恢复这个用户！",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ef5285",
+                    confirmButtonText: "是的，删除",
+                    closeOnConfirm: false
+                }, function () {
+                        //立即删除用户
+                        $.ajax({
+                            url: url,
+                            data: {id:id,_csrf:csrf},
+                            type: 'post',
+                            dataType: 'json'
+                        }).then(({status}) => {
+                            if (status == 0) {
+                                $('#uid'+id).remove();
+                                swal("删除", "该用户已被软删除。", "success");
+                                return false;
+                            }
+                        });
+                });
+
+            });
+
+
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>

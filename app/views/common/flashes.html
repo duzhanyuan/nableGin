@@ -1,0 +1,8 @@
+{{if .flashes}}
+   <div id="success_info" class="hide">
+      {{ range $f := .flashes }}
+         <div>{{ $f }}</div>
+      {{ end }}
+   </div>
+{{end}}
+

@@ -82,7 +82,8 @@ func (v ViewData) GetStringDefault(key string, def string) string {
 }
 
 func (v ViewData) HTML(code int, name string) {
-	v.Set("User", sessions.Default(v.GetContext()).Get("user"))
+	v.Set("username", sessions.Default(v.GetContext()).Get("username"))
+	v.Set("userid", sessions.Default(v.GetContext()).Get("userid"))
 	v.Set("Token", csrf.GetToken(v.GetContext()))
 	v.Set("AdminTitle", "nAble Pro")
 	v.Set("path", v.GetContext().FullPath())

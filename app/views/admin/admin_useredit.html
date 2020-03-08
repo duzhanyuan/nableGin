@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.AdminTitle}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                {{template "menu.html" .}}
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    {{template "welcometip.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "profile.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "messages.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "tips.html" .}}
+                </li>
+                <li>
+                    <a href="/admin/logout">
+                        <i class="fa fa-sign-out"></i> 注销
+                    </a>
+                </li>
+                <li>
+                    <a class="right-sidebar-toggle">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>用户列表</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">主页</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a>用户管理</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>用户列表</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>修改用户表单元素 <small>这里可以修改姓名、性别、密码等。</small></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-8">
+                               <form action="/admin/user/put" method="post" class="form form-horizontal" id="form-member-add">
+                                <input type="hidden" name="id" value="{{.userinfo.ID}}" />
+                                <input class="hide" name="_csrf" value="{{.Token}}" />
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">*姓名</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-md-6">
+                                            <input type="text" name="truename" class="form-control" autocomplete="off" value="{{.userinfo.Truename}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">*用户名</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-md-6">
+                                            <h4>{{.userinfo.Username}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">性别</label>
+                                    <div class="col-sm-10 pt-2 pl-3">
+                                        <div class="ml-3">
+                                            <label>
+                                                <input type="radio"  value="先生" id="optionsRadios2" name="sex" {{if eq .userinfo.Sex "先生" }}checked{{end}}>先生
+                                            </label>
+                                            <label class="ml-3">
+                                                <input type="radio" value="女士" id="optionsRadios1" name="sex" {{if eq .userinfo.Sex "女士" }}checked{{end}}> 女士
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">*密码</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-md-6">
+                                            <input type="text" name="password" class="form-control" placeholder="123456" value="123456" autocomplete="off">
+                                            <small>提交后，将重新置初始密码，默认123456</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">*邮箱</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-md-6">
+                                            <h4>{{.userinfo.Email}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">*手机号</label>
+                                    <div class="col-sm-10">
+                                        <div class="col-md-6">
+                                            <input type="text" name="mobile" class="form-control" autocomplete="off" value="{{.userinfo.Mobile}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-4 col-sm-offset-2">
+
+                                        <button class="btn btn-w-m btn-primary" type="submit"><i class="fa fa-plus"></i>　提交修改用户</button>
+
+                                    </div>
+                                </div>
+                            </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {{template "footer.html" .}}
+
+        </div>
+
+
+        </div>
+        {{template "sidebar.html" .}}
+        </div>
+
+    {{/* 闪存消息 */}}
+    {{template "flashes.html" .}}
+
+    <!-- Mainly scripts -->
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/js/custom-plugin.js"></script>
+    <script src="/static/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Sweet alert -->
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>
