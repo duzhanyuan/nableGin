@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.AdminTitle}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <!-- treetable -->
+    <link href="/static/css/plugins/treetable/jquery.treetable.min.css" rel="stylesheet">
+
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                {{template "menu.html" .}}
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    {{template "welcometip.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "profile.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "messages.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "tips.html" .}}
+                </li>
+                <li>
+                    <a href="/admin/logout">
+                        <i class="fa fa-sign-out"></i> 注销
+                    </a>
+                </li>
+                <li>
+                    <a class="right-sidebar-toggle">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>用户列表</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">主页</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a>用户管理</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>权限管理</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>权限管理列表</h5>
+
+                            </div>
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-9 text-right">
+                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-table"><i class="fa fa-plus"></i>　新增权限</button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-row mt-2" id="table_tree">
+                                    <thead>
+                                    <tr>
+                                        <th width="25%"><button class="btn btn-success btn-circle" type="button" id="table_expand" flag="expandAll"><i class="fa fa-caret-right"></i></button> 权限名称</th>
+                                        <th width="25%">菜单url</th>
+                                        <th width="25%">权限标识</th>
+                                        <th width="10%">类型</th>
+                                        <th width="15%" class="text-center">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $i, $v := .Nodelist}}
+                                    <tr data-tt-id="{{$v.ID}}" data-tt-parent-id="{{$v.Pid}}">
+                                        <td>{{$v.Name}}</td>
+                                        <td>{{$v.Url}}</td>
+                                        <td>{{$v.RouteName}}</td>
+                                        <td>
+                                            {{if eq $v.IsType 0}}
+                                                <btn class="label label-primary btn-status" >菜单</btn>
+                                            {{else}}
+                                                <btn class="label label-warning btn-status" >按钮</btn>
+                                            {{end}}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="javascript:;" id="{{$v.ID}}" pid="{{$v.Pid}}" name="{{$v.Name}}" url="{{$v.Url}}" routename="{{$v.RouteName}}" istype="{{$v.IsType}}" icon="{{$v.Icon}}" reorder="{{$v.Reorder}}" class="btn-white btn btn-sm btn-edit">编辑</a>
+                                            <a href="/admin/node/nodedel?id={{$v.ID}}"  class="btn-white btn btn-sm btn-del">删除</a></td>
+
+                                    </tr>
+                                    {{end}}
+                                    </tbody>
+
+                                </table>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {{template "footer.html" .}}
+            </div>
+
+        </div>
+        {{template "sidebar.html" .}}
+        </div>
+
+    <div class="modal inmodal fade" id="modal-table" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h5 class="modal-title font-weight-light">新增权限</h5>
+                </div>
+                <form action="/admin/node/nodeadd" method="post" class="form form-horizontal" id="adminnodestore">
+                    <input class="hide" name="_csrf" value="{{.Token}}" />
+                    <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">上级菜单</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <select class="form-control m-b" name="pid" id="data-pid">
+                                    <option value="0">顶级菜单</option>
+                                    {{range $v := .Menulist}}
+                                        <option value="{{$v.ID}}">{{$v.Name}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">权限名称 *</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <input type="text" name="name" id="data-name" class="form-control" autocomplete="off" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">权限类型 *</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <div class="i-checks float-left mr-2"><label> <input type="radio" value="0" name="istype" id="data-0" checked=""> <i></i> 菜单 </label></div>
+                                <div class="i-checks float-left"><label> <input type="radio" value="1" name="istype" id="data-1"> <i></i> 按钮 </label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">菜单url</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <input type="text" name="url"  id="data-url" class="form-control" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">权限标识</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <input type="text" name="routename" id="data-route_name" class="form-control" autocomplete="off" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">菜单图标</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <input type="text" name="icon" id="data-icon" class="form-control" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right">排序号 *</label>
+                        <div class="col-sm-9">
+                            <div class="col-md-10">
+                                <input type="text" name="reorder" id="data-reorder" class="form-control" autocomplete="off" value="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">保存提交</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{/* 闪存消息 */}}
+    {{template "flashes.html" .}}
+
+    <!-- Mainly scripts -->
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Sweet alert -->
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- validate -->
+    <script src="/static/js/plugins/validate/jquery.validate.min.js"></script>
+
+    <!-- treetable -->
+    <script src="/static/js/plugins/treetable/jquery.treetable.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/js/custom-plugin.js"></script>
+    <script src="/static/js/plugins/pace/pace.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $("#table_tree").treetable({ expandable: true });
+            $("#table_expand").click(function (e) {
+                if($(this).attr('flag')=='expandAll'){
+                    $('#table_tree').treetable('expandAll');
+                    $(this).attr('flag','collapseAll');
+                    $(this).html('<i class="fa fa-caret-down"></i>');
+                }else{
+                    $('#table_tree').treetable('collapseAll');
+                    $(this).attr('flag','expandAll');
+                    $(this).html('<i class="fa fa-caret-right"></i>');
+                }
+            });
+
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            //表单验证
+            $("#adminnodestore").validate({
+                rules: {
+                    name: "required",
+                    reorder: "required",
+                },
+                messages: {
+                    name: "请输入权限名称",
+                    reorder: "请输入排序号",
+                }
+            });
+
+            //编辑按钮动作
+            $('.btn-edit').click(function () {
+                let id=$(this).attr('id');
+                $('#adminnodestore').attr('action','/admin/node/nodeupdate?id='+id);//弹窗表单动作切成update
+                $('.modal-title').text('修改权限');
+                $("#data-pid").find("option[value = '"+$(this).attr('pid')+"']").attr("selected",true);
+                if($(this).attr('istype')=='0'){
+                    $('#data-0').iCheck('check');
+                }else{
+                    $('#data-1').iCheck('check');
+                }
+                $('#data-name').val($(this).attr('name'));
+                $('#data-url').val($(this).attr('url'));
+                $('#data-route_name').val($(this).attr('routename'));
+                $('#data-icon').val($(this).attr('icon'));
+                $('#data-reorder').val($(this).attr('reorder'));
+
+                $('#modal-table').modal('show');
+
+
+            });
+            $('#modal-table').on('hidden.bs.modal', function (e) {
+                //关闭弹窗后，表单动作切成新增store
+                let url='/admin/node/nodeadd';
+                $('#adminnodestore').attr('action',url);
+                $('.modal-title').text('新增权限');
+                $('#data-name').val('');
+                $('#data-0').iCheck('check');
+                $('#data-url').val('');
+                $('#data-route_name').val('');
+                $('#data-icon').val('');
+                $('#data-reorder').val('');
+            })
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>

@@ -73,6 +73,18 @@ func registerRouter(router *gin.Engine) {
 		user.GET("/edit/:id", controllers.EditBy)//用户编辑界面
 		user.POST("/put", controllers.EditPut)//编辑提交
 
+		//权限管理 /admin/node
+		node := admin.Group("node")
+		node.GET("/role", controllers.Role)//角色列表
+		node.POST("/roleadd", controllers.Roleadd)//提交新增角色
+		node.POST("/roleupdate", controllers.Roleupdate)//提交修改角色
+		node.GET("/roledel", controllers.Roledel)//删除角色
+
+		node.GET("/node", controllers.Node)//节点列表
+		node.POST("/nodeadd", controllers.Nodeadd)//提交新增节点
+		node.POST("/nodeupdate", controllers.Nodeupdate)//提交修改节点
+		node.GET("/nodedel", controllers.Nodedel)//删除节点
+
 
 
 	}

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"nable.gin/app"
 	. "nable.gin/config"
 	"nable.gin/libraries/db"
-	"nable.gin/app"
 )
 
 func main() {
