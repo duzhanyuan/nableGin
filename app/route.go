@@ -20,7 +20,8 @@ func registerRouter(router *gin.Engine) {
 	//设置初始权限 默认ADMIN用户拥有所有权限
 	Enforcer.LoadPolicy()
 	Enforcer.AddPolicy("anonymous", "/admin", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login/", "*")
+	Enforcer.AddPolicy("anonymous", "/admin/login/", "GET")
+	Enforcer.AddPolicy("anonymous", "/admin/login/", "POST")
 	Enforcer.AddPolicy("admin", "/*", "*")
 	if err := Enforcer.SavePolicy(); err != nil {
 		panic(err)
@@ -44,7 +45,7 @@ func registerRouter(router *gin.Engine) {
 
 	//后台入口
 	router.GET("/admin", func(ctx *gin.Context) {
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 	})
 
 	//路由组设置
@@ -53,6 +54,7 @@ func registerRouter(router *gin.Engine) {
 	{
 		//dash面板首页
 		admin.GET("/dash/index", controllers.Index)
+
 		//退出登陆 /admin/logout
 		admin.GET("/dash/logout", controllers.Logout)
 

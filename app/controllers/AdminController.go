@@ -39,7 +39,7 @@ func Logout(ctx *gin.Context)  {
 	session.Save()
 
 
-	ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+	ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 
 }
 

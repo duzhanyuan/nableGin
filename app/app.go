@@ -31,9 +31,8 @@ func RunGin(port int) {
 	app := gin.Default()
 	//注册session，redis存储
 	store, _ := redis.NewStore(10, "tcp", Conf.RedisAddr, "", []byte("secret"))
-	store.Options(sessions.Options{MaxAge: 3600})
+	store.Options(sessions.Options{MaxAge: 3600,Path: "/",})
 	app.Use(sessions.Sessions("GinSession", store))
-
 
 	//全局使用CSRF中间件,权限中间件
 	app.Use(csrf.Middleware())

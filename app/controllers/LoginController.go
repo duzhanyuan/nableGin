@@ -67,7 +67,7 @@ func PostLogin(ctx *gin.Context) {
 	if err := params.Bind(ctx); err != "" {
 		session.AddFlash(err)
 		session.Save()//消息放入闪存
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 		return
 	}
 
@@ -76,14 +76,14 @@ func PostLogin(ctx *gin.Context) {
 	if sessID == nil {
 		session.AddFlash( "验证码过期失效")
 		session.Save()//消息放入闪存
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 		return
 	}
 
 	if !captcha.VerifyString(sessID.(string), params.Capt_request) {
 		session.AddFlash( "验证码错误")
 		session.Save()//消息放入闪存
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 		return
 	}
 
@@ -93,7 +93,7 @@ func PostLogin(ctx *gin.Context) {
 	if userInfo, err_db = Dao.GetUserByName(params.Username); err_db != nil {
 		session.AddFlash( "无效的用户名")
 		session.Save()//消息放入闪存
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 		return
 	}
 
@@ -101,7 +101,7 @@ func PostLogin(ctx *gin.Context) {
 	if ! Hash.CompareHashAndPassword(userInfo.Password,params.Password) {
 		session.AddFlash( "无效的密码")
 		session.Save()//消息放入闪存
-		ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
+		ctx.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
 		return
 	}else{
 		//密码匹配
