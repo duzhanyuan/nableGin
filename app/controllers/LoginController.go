@@ -72,7 +72,7 @@ func PostLogin(ctx *gin.Context) {
 	}
 
 	//取出SESSION存储的验证码
-	sessID := session.Get("CAPTCHA_Id")
+	sessID := session.Get("CAPTCHA_ID")
 	if sessID == nil {
 		session.AddFlash( "验证码过期失效")
 		session.Save()//消息放入闪存
@@ -105,11 +105,13 @@ func PostLogin(ctx *gin.Context) {
 		return
 	}else{
 		//密码匹配
-		userInfo.Password="123456" //session中显示假密码
+		//userInfo.Password="123456" //session中显示假密码
 		session.Set("username", userInfo.Username)
 		session.Set("userid", userInfo.ID)
 		//session.Set("userInfo", map[string]interface{}{"userInfo": userInfo,})
 		session.Save()
+
+
 		ctx.Redirect(http.StatusSeeOther, "/admin/dash/index")//跳转
 		return
 	}
@@ -129,7 +131,7 @@ func Captcha(ctx *gin.Context) {
 	captchaId := captcha.NewLen(4)
 	//验证码ID存储到SESSION
 	session := sessions.Default(ctx)
-	session.Set("CAPTCHA_Id", captchaId)
+	session.Set("CAPTCHA_ID", captchaId)
 	session.Save()
 
 	ctx.Header("Content-Type", "image/png")

@@ -14,6 +14,7 @@ func Index(ctx *gin.Context) {
 	session := sessions.Default(ctx)
 	v := viewdata.Default(ctx)
 
+
 	////从闪存中获取消息
 	flashes := session.Flashes()
 	v.Set("flashes", flashes)
@@ -21,6 +22,7 @@ func Index(ctx *gin.Context) {
 
 
 	v.HTML(http.StatusOK, "admin_index.html")
+
 
 }
 
@@ -32,13 +34,12 @@ func Index(ctx *gin.Context) {
 func Logout(ctx *gin.Context)  {
 
 	session := sessions.Default(ctx)
-	session.Delete("username")
-	session.Delete("userid")
+	session.Clear()
 	session.AddFlash( "您已经成功退出系统")
 	session.Save()
-	ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
-	return
 
+
+	ctx.Redirect(http.StatusSeeOther, "/admin/login")//跳转
 
 }
 

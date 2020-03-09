@@ -1,13 +1,13 @@
 package app
 
 import (
-	. "nable.gin/config"
 	"github.com/casbin/casbin/v2"
 	redisadapter "github.com/casbin/redis-adapter/v2"
-	Middleware "nable.gin/app/middleware"
 	"github.com/gin-gonic/gin"
 	"nable.gin/app/controllers"
+	. "nable.gin/config"
 	"net/http"
+	middleware "nable.gin/app/middleware"
 )
 
 //路由设置
@@ -49,13 +49,12 @@ func registerRouter(router *gin.Engine) {
 
 	//路由组设置
 	admin := router.Group("/admin")
-	admin.Use(Middleware.NewAuthorizer(Enforcer))//使用权限验证中间件
+	admin.Use(middleware.NewAuthorizer(Enforcer))//使用权限验证中间件
 	{
 		//dash面板首页
 		admin.GET("/dash/index", controllers.Index)
-
 		//退出登陆 /admin/logout
-		admin.GET("/logout", controllers.Logout)
+		admin.GET("/dash/logout", controllers.Logout)
 
 		// 嵌套路由组
 		// 登陆控制层 /admin/login

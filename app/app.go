@@ -1,12 +1,13 @@
 package app
 
 import (
-	. "nable.gin/config"
 	"context"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"log"
+	. "nable.gin/config"
 	"nable.gin/libraries/csrf"
 	"nable.gin/libraries/helper"
 	"net/http"
@@ -14,9 +15,6 @@ import (
 	"os/signal"
 	"strconv"
 	"time"
-	"html/template"
-
-
 )
 
 
@@ -33,6 +31,7 @@ func RunGin(port int) {
 	app := gin.Default()
 	//注册session，redis存储
 	store, _ := redis.NewStore(10, "tcp", Conf.RedisAddr, "", []byte("secret"))
+	store.Options(sessions.Options{MaxAge: 3600})
 	app.Use(sessions.Sessions("GinSession", store))
 
 
