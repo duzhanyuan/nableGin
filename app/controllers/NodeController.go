@@ -188,7 +188,7 @@ func Node(ctx *gin.Context)  {
 	//取出所有菜单
 	menuList,_ := dao.QueryMenus()
 
-	v.Set("Nodelist", tmpNodelist)//用户列表
+	v.Set("Nodelist", tmpNodelist)//列表
 	v.Set("Menulist", menuList)//菜单列表
 	v.HTML(http.StatusOK, "admin_node.html")
 
@@ -201,6 +201,7 @@ func Node(ctx *gin.Context)  {
  * 请求url：node/nodeadd
  */
 func Nodeadd(ctx *gin.Context)  {
+
 
 	session := sessions.Default(ctx)
 	var params dto.Nodeadd_validate //登陆表单验证结构体 并返回表单值
@@ -226,8 +227,8 @@ func Nodeadd(ctx *gin.Context)  {
 		session.AddFlash("添加成功！")
 	}
 	session.Save()
-	ctx.Redirect(http.StatusSeeOther, "/admin/node/node") //跳转
-
+	ctx.Redirect(http.StatusSeeOther, "/admin/node/node")//跳转
+	return
 
 
 }
@@ -297,4 +298,149 @@ func Nodedel(ctx *gin.Context)  {
 	ctx.Redirect(http.StatusSeeOther, "/admin/node/node") //跳转
 
 }
+
+
+
+
+/**
+ * 节点删除
+ * 请求类型：GET
+ * 请求url：node/roleset
+ */
+func Roleset(ctx *gin.Context)  {
+
+	v := viewdata.Default(ctx)
+
+	//读取出所有的权限节点
+	nodeList,_ := dao.QueryNode()
+	//将节点按树形分类，递归迭代数组排列
+	tmpNodelist := services.Iteration(nodeList, 0)
+
+	//读取当前角色信息
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	roleInfo, _ := dao.GetRoleById(id)
+
+	//根据角色所拥有的菜单 重置所有菜单里的 Role_is_active 选中值
+	for idx, v := range tmpNodelist {
+		for _, k := range roleInfo.Node {
+			if (v.ID == k.ID){
+				tmpNodelist[idx].Role_is_active=true
+			}
+		}
+	}
+
+
+	v.Set("Nodelist", tmpNodelist)//列表
+	v.Set("role", roleInfo)//角色信息
+
+	v.HTML(http.StatusOK, "admin_nodeset.html")
+}
+
+
+/**
+ * 角色设置权限
+ * 请求类型：POST
+ * 请求url：node/rolechecked
+ */
+func Rolechecked(ctx *gin.Context)  {
+
+	role_id, _ := strconv.Atoi(ctx.PostForm("role_id"))
+	node_id, _ := strconv.Atoi(ctx.PostForm("node_id"))
+
+	dao.RoleInsertNodeId(role_id,node_id)
+
+	data := map[string]interface{}{
+		"status": 0,
+		"result": "权限设置成功",
+	}
+	ctx.JSONP(http.StatusOK, data)
+
+
+}
+
+
+
+
+/**
+ * 角色设置权限
+ * 请求类型：POST
+ * 请求url：node/rolechecked
+ */
+func Roleunchecked(ctx *gin.Context)  {
+
+	role_id, _ := strconv.Atoi(ctx.PostForm("role_id"))
+	node_id, _ := strconv.Atoi(ctx.PostForm("node_id"))
+
+	dao.RoleDelNodeId(role_id,node_id)
+
+	data := map[string]interface{}{
+		"status": 0,
+		"result": "权限删除成功",
+	}
+	ctx.JSONP(http.StatusOK, data)
+
+
+}
+
+
+
+
+
+
+//
+///**
+// * 分配角色权限列表
+// *
+// * @param  int  $id
+// * @return \Illuminate\Http\Response
+// */
+//public function node(Role $role) {
+////通过$role模型的多对多关系取出对应模型的节点权限表
+////dump($role->nodes->toArray());
+////dump($role->nodes()->pluck('name','id')->toArray());
+//// 读取出所有的权限
+//$nodeAll = (new Node())->getAllList();
+//// role模型的nodes()方法读取当前角色所拥有的权限
+//$mynodes = $role->nodes()->pluck('id')->toArray();
+//
+//return view('admin.role.node',compact('role','nodeAll','mynodes'));
+//}
+//
+////角色设置对应的权限
+//public function checked(Request $request) {
+//
+//$role_id=$request->input('role_id');
+//$node_id=$request->input('node_id');
+//
+////避免重复　先删除
+//DB::table('role_node')
+//->where('role_id', '=', $role_id)
+//->where('node_id', '=', $node_id)
+//->delete();
+////再插入
+//DB::table('role_node')->insert(
+//['role_id' => $role_id, 'node_id' => $node_id]
+//);
+//
+//$data['status']=0;
+//$data['msg']='权限设置成功';
+//return response()->json($data);
+//}
+//
+////角色取消对应的权限
+//public function unchecked(Request $request) {
+//
+//$role_id=$request->input('role_id');
+//$node_id=$request->input('node_id');
+//
+//DB::table('role_node')
+//->where('role_id', '=', $role_id)
+//->where('node_id', '=', $node_id)
+//->delete();
+//
+//$data['status']=0;
+//$data['msg']='权限取消成功';
+//return response()->json($data);
+//}
+
 

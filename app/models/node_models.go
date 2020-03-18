@@ -14,5 +14,7 @@ type Node struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    *time.Time
-	Child []*Node          `gorm:"-"`
+	Child []*Node                `gorm:"-"` //包含子菜单
+	Role_is_active bool          `gorm:"-"` //某个角色是否拥有这个节点权限
+
 }

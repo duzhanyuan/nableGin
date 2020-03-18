@@ -86,6 +86,10 @@ func registerRouter(router *gin.Engine) {
 		node.POST("/nodeupdate", controllers.Nodeupdate)//提交修改节点
 		node.GET("/nodedel", controllers.Nodedel)//删除节点
 
+		node.GET("/roleset/:id", controllers.Roleset)//角色设置权限列表页
+		node.POST("/rolechecked", controllers.Rolechecked)//角色设置权限
+		node.POST("/roleunchecked", controllers.Roleunchecked)//角色删除权限
+
 
 
 	}

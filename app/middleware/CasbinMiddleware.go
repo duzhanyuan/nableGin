@@ -51,6 +51,7 @@ func (a *BasicAuthorizer) RequirePermission(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Clear()
 	session.Save()
-	c.HTML(http.StatusNotFound, "403.html", gin.H{})
-	c.AbortWithStatus(403)
+	c.Redirect(http.StatusSeeOther, "/admin/login/")//跳转
+	//c.HTML(http.StatusNotFound, "403.html", gin.H{})
+	//c.AbortWithStatus(403)
 }

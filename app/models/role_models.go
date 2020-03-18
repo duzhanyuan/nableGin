@@ -9,4 +9,5 @@ type Role struct {
 	UpdatedAt    time.Time
 	DeletedAt    *time.Time
 
+	Node []Node `json:"Node" gorm:"many2many:role_nodes;"`
 }

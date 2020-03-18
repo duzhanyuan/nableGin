@@ -9,7 +9,7 @@ import (
 type Nodeadd_validate struct {
 	Name       string    `form:"name" json:"节点名称" validate:"required"`
 	IsType     uint8      `form:"istype" json:"权限类型" validate:"gte=0,lte=1"`
-	Reorder    uint8      `form:"reorder" json:"排序" validate:"gte=0"`
+	Reorder    string      `form:"reorder" json:"排序" validate:"numeric,gte=0"`
 }
 
 

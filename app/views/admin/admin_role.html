@@ -109,7 +109,7 @@
                                     {{range $i, $v := .Rolelist}}
                                     <tr>
                                         <td>{{$v.Name}}</td>
-                                        <td><a href="" type="button" class="btn btn-primary btn-xs">权限</a></td>
+                                        <td><a href="/admin/node/roleset/{{$v.ID}}" type="button" class="btn btn-primary btn-xs">权限</a></td>
                                         <td>{{date "2006-01-02" $v.CreatedAt}}</td>
                                         <td></td>
                                         <td>

@@ -17,7 +17,7 @@ func Migrations()  {
 			&models.User{},     //用户表
 			&models.Node{},     //节点权限表
 			&models.Role{},     //角色表
-			&models.RoleNode{}, //角色节点中间表
+
 		)
 
 		//user := models.User{

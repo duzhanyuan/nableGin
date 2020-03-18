@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.AdminTitle}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Sweet Alert -->
+    <link href="/static/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <!-- treetable -->
+    <link href="/static/css/plugins/treetable/jquery.treetable.min.css" rel="stylesheet">
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                {{template "menu.html" .}}
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    {{template "welcometip.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "profile.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "messages.html" .}}
+                </li>
+                <li class="dropdown">
+                    {{template "tips.html" .}}
+                </li>
+                <li>
+                    <a href="/admin/dash/logout">
+                        <i class="fa fa-sign-out"></i> 注销
+                    </a>
+                </li>
+                <li>
+                    <a class="right-sidebar-toggle">
+                        <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>用户列表</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">主页</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a>用户管理</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>分配角色</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>分配角色管理列表 <small>直接勾选对应的权限以设置角色权限。</small></h5>
+                            </div>
+                            <div class="ibox-content">
+                                <form method="get">
+
+                                    <table class="table table-hover table-row" id="table_tree">
+                                        <thead>
+                                        <tr>
+                                            <th width="20%"><button class="btn btn-success btn-circle " type="button" id="table_expand" flag="expandAll"><i class="fa fa-caret-right"></i></button>　角色名称：{{.role.Name}}</th>
+                                            <th width="10%"></th>
+                                            <th width="10%" class="text-right"></th>
+                                            <th width="10%"> <div class="i-checks"><label> <input type="checkbox" class="allcheck" node_id="" role_id="{{.role.ID}}"> <i></i> </label></div></th>
+                                            <th width="50%" class="text-right"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{range $i, $v := .Nodelist}}
+                                            <tr data-tt-id="{{$v.ID}}" data-tt-parent-id="{{$v.Pid}}">
+                                                <td>{{$v.Name}}</td>
+                                                <td>
+                                                    {{if eq $v.IsType 0}}
+                                                        <btn class="label label-primary btn-status" >菜单</btn>
+                                                    {{else}}
+                                                        <btn class="label label-warning btn-status" >按钮</btn>
+                                                    {{end}}
+                                                </td>
+                                                <td>
+                                                    {{if eq $v.IsType 0}}
+                                                        查看
+                                                    {{else}}
+                                                        {{if eq $v.RouteName "GET"}}
+                                                            查看
+                                                        {{else}}
+                                                            提交
+                                                        {{end}}
+                                                    {{end}}
+                                                </td>
+                                                <td>
+                                                    <div class="i-checks"><label> <input type="checkbox" class="onecheck" node_id="{{$v.ID}}"   {{if $v.Role_is_active}}checked=""{{end}}> <i></i> </label></div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+
+                                        </tbody>
+                                        {{end}}
+                                    </table>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{template "footer.html" .}}
+            </div>
+
+
+
+        </div>
+        {{template "sidebar.html" .}}
+        </div>
+
+    {{/* 闪存消息 */}}
+    {{template "flashes.html" .}}
+
+    <!-- Mainly scripts -->
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Sweet alert -->
+    <script src="/static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- treetable -->
+    <script src="/static/js/plugins/treetable/jquery.treetable.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/js/custom-plugin.js"></script>
+    <script src="/static/js/plugins/pace/pace.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            //const _token="";
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $("#table_tree").treetable({expandable:true});
+            $("#table_expand").click(function (e) {
+                if($(this).attr('flag')=='expandAll'){
+                    $('#table_tree').treetable('expandAll');
+                    $(this).attr('flag','collapseAll');
+                    $(this).html('<i class="fa fa-caret-down"></i>');
+                }else{
+                    $('#table_tree').treetable('collapseAll');
+                    $(this).attr('flag','expandAll');
+                    $(this).html('<i class="fa fa-caret-right"></i>');
+                }
+            });
+
+
+            $('.onecheck').on('ifChecked', function(event){
+                let url='/admin/node/rolechecked';
+                let role_id={{.role.ID}};
+                let node_id=$(this).attr('node_id');
+                $.post(url,{_csrf:"{{.Token}}",role_id:role_id,node_id:node_id})
+                 .then(({status,result})=>{});
+            });
+
+            $('.onecheck').on('ifUnchecked', function(event){
+                let url='/admin/node/roleunchecked';
+                let role_id={{.role.ID}};
+                let node_id=$(this).attr('node_id');
+                $.post(url,{_csrf:"{{.Token}}",role_id:role_id,node_id:node_id})
+                    .then(({status,msg})=>{});
+            });
+
+            $('.allcheck').on('ifChecked', function(event){
+                $('input').iCheck('check');
+            });
+
+            $('.allcheck').on('ifUnchecked', function(event){
+                $('input').iCheck('uncheck');
+            });
+
+
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>
