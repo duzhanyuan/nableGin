@@ -347,12 +347,23 @@ func Rolechecked(ctx *gin.Context)  {
 	role_id, _ := strconv.Atoi(ctx.PostForm("role_id"))
 	node_id, _ := strconv.Atoi(ctx.PostForm("node_id"))
 
-	dao.RoleInsertNodeId(role_id,node_id)
+
+	var status int
+	var result string
+	if err_db := dao.RoleInsertNodeId(role_id,node_id); err_db != nil {
+		status = 1
+		result = "权限设置失败"
+	}else{
+		status = 0
+		result = "权限设置成功"
+	}
 
 	data := map[string]interface{}{
-		"status": 0,
-		"result": "权限设置成功",
+		"status": status,
+		"result": result,
 	}
+
+
 	ctx.JSONP(http.StatusOK, data)
 
 
