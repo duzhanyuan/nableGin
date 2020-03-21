@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/casbin/casbin/v2 v2.2.1
+	github.com/casbin/gorm-adapter/v2 v2.0.3
 	github.com/casbin/redis-adapter/v2 v2.0.1
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/dchest/uniuri v0.0.0-20200228104902-7aecb25e1fe5

@@ -1,31 +1,28 @@
 package app
 
 import (
-	"github.com/casbin/casbin/v2"
-	redisadapter "github.com/casbin/redis-adapter/v2"
 	"github.com/gin-gonic/gin"
 	"nable.gin/app/controllers"
-	. "nable.gin/config"
 	"net/http"
 	middleware "nable.gin/app/middleware"
+	"nable.gin/libraries/casbin"
 )
 
 //路由设置
 func registerRouter(router *gin.Engine) {
 
 	//CASBIN权限配置
-	//配置casbin权限数据同步到REDIS
-	adp := redisadapter.NewAdapter("tcp", Conf.RedisAddr)
-	var Enforcer, _ = casbin.NewEnforcer("casbin.conf", adp)
+	//配置casbin权限数据同步到MYSQL || REDIS
+	e := casbin.InitCasbinMysql()
 	//设置初始权限 默认ADMIN用户拥有所有权限
-	Enforcer.LoadPolicy()
-	Enforcer.AddPolicy("anonymous", "/admin", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login/", "GET")
-	Enforcer.AddPolicy("anonymous", "/admin/login/", "POST")
-	Enforcer.AddPolicy("admin", "/*", "*")
-	if err := Enforcer.SavePolicy(); err != nil {
-		panic(err)
-	}
+	//e.LoadPolicy()
+	//e.AddPolicy("anonymous", "/admin", "GET")
+	//e.AddPolicy("anonymous", "/admin/login/", "GET")
+	//e.AddPolicy("anonymous", "/admin/login/", "POST")
+	//e.AddPolicy("admin", "/*", "*")
+	//if err := e.SavePolicy(); err != nil {
+	//	panic(err)
+	//}
 
 	//自定义404
 	router.NoRoute(err404)
@@ -50,7 +47,7 @@ func registerRouter(router *gin.Engine) {
 
 	//路由组设置
 	admin := router.Group("/admin")
-	admin.Use(middleware.NewAuthorizer(Enforcer))//使用权限验证中间件
+	admin.Use(middleware.NewAuthorizer(e))//使用权限验证中间件
 	{
 		//dash面板首页
 		admin.GET("/dash/index", controllers.Index)
