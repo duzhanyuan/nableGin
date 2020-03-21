@@ -48,14 +48,6 @@ func GetLogin(ctx *gin.Context) {
 
 
 
-//func (admin *LoginController) GetLogin2(ctx *gin.Context) {
-//
-//	ctx.JSON(200, map[string]interface{}{"meeage": flashes,})
-//
-
-
-
-
 //登陆 admin.Login
 func PostLogin(ctx *gin.Context) {
 

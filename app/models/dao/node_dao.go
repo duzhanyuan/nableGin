@@ -34,18 +34,18 @@ func NodeInsert(node models.Node) (err error) {
 
 //根据模型 编辑入库
 func NodeUpdate(node models.Node) (err error) {
-
+	db := db.GetMysql()
 	//以下为不修改字段
 	if node.ID != 0 {
 		var oldData models.Node
-		db.GetMysql().First(&oldData, node.ID)
+		db.First(&oldData, node.ID)
 
 		node.ID = oldData.ID
 		node.CreatedAt = oldData.CreatedAt
 	}
 
 
-	res := db.GetMysql().Save(&node)
+	res := db.Save(&node)
 	err = res.Error
 	return
 }
