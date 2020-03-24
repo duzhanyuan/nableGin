@@ -394,64 +394,46 @@ func Roleunchecked(ctx *gin.Context)  {
 }
 
 
+/**
+ * 用户角色权限设置
+ * 请求类型：GET
+ * 请求url：node/user
+ */
+func UserNodeSet(ctx *gin.Context)  {
 
 
+	v := viewdata.Default(ctx)
+	page := ctx.DefaultQuery("page", "1")
+	pageNum, _ := strconv.Atoi(page) //string2int
+
+	//接收搜索key
+	search := ctx.DefaultQuery("search", "")
+
+	//获取db连接类
+	db := db.GetMysql()
+	//默认搜索所有id>0 where作用域问题 要在{}外定义才能被Paginator引用
+	where := db.Where("id > ?", 0)
+	//如果不为空
+	if search != "" {
+		where = db.Where("truename LIKE ?", "%"+search+"%")
+	}
+
+	//定义模型为切片数组
+	var userList []models.User
+
+	//分页类获取数据 &userList 返回切片数组列表  Paginator为分页相关结构体
+	Paginator := pagination.Paging(&pagination.Param{
+		DB:      where,
+		Page:    pageNum,
+		Limit:   10,
+		OrderBy: []string{"id desc"},
+	}, &userList)
+
+	v.Set("Userlist", userList)
+	v.Set("TotalPage", Paginator.TotalPage)
+	v.Set("Page", Paginator.Page)
+	v.HTML(http.StatusOK, "admin_usernodeset.html")
 
 
-//
-///**
-// * 分配角色权限列表
-// *
-// * @param  int  $id
-// * @return \Illuminate\Http\Response
-// */
-//public function node(Role $role) {
-////通过$role模型的多对多关系取出对应模型的节点权限表
-////dump($role->nodes->toArray());
-////dump($role->nodes()->pluck('name','id')->toArray());
-//// 读取出所有的权限
-//$nodeAll = (new Node())->getAllList();
-//// role模型的nodes()方法读取当前角色所拥有的权限
-//$mynodes = $role->nodes()->pluck('id')->toArray();
-//
-//return view('admin.role.node',compact('role','nodeAll','mynodes'));
-//}
-//
-////角色设置对应的权限
-//public function checked(Request $request) {
-//
-//$role_id=$request->input('role_id');
-//$node_id=$request->input('node_id');
-//
-////避免重复　先删除
-//DB::table('role_node')
-//->where('role_id', '=', $role_id)
-//->where('node_id', '=', $node_id)
-//->delete();
-////再插入
-//DB::table('role_node')->insert(
-//['role_id' => $role_id, 'node_id' => $node_id]
-//);
-//
-//$data['status']=0;
-//$data['msg']='权限设置成功';
-//return response()->json($data);
-//}
-//
-////角色取消对应的权限
-//public function unchecked(Request $request) {
-//
-//$role_id=$request->input('role_id');
-//$node_id=$request->input('node_id');
-//
-//DB::table('role_node')
-//->where('role_id', '=', $role_id)
-//->where('node_id', '=', $node_id)
-//->delete();
-//
-//$data['status']=0;
-//$data['msg']='权限取消成功';
-//return response()->json($data);
-//}
-
+}
 

@@ -47,7 +47,7 @@ func registerRouter(router *gin.Engine) {
 
 	//路由组设置
 	admin := router.Group("/admin")
-	admin.Use(middleware.NewAuthorizer(e))//使用权限验证中间件
+	admin.Use(middleware.NewAuthorizer(e))//使用CASBIN权限验证中间件
 	{
 		//dash面板首页
 		admin.GET("/dash/index", controllers.Index)
@@ -87,6 +87,8 @@ func registerRouter(router *gin.Engine) {
 		node.POST("/rolechecked", controllers.Rolechecked)//角色设置权限
 		node.POST("/roleunchecked", controllers.Roleunchecked)//角色删除权限
 
+		node.GET("/user", controllers.UserNodeSet)//用户角色权限设置
+
 
 
 	}
@@ -95,7 +97,7 @@ func registerRouter(router *gin.Engine) {
 
 }
 
-
+//404页
 func err404(ctx *gin.Context) {
 	ctx.HTML(http.StatusNotFound, "404.html", gin.H{})
 }

@@ -31,7 +31,7 @@
         <ul class="nav nav-second-level">
             <li {{if strstr .path "/admin/node/role"}} class="active" {{end}}><a href="/admin/node/role"><i class="fa fa-bandcamp" aria-hidden="true"></i> 角色管理</a></li>
             <li {{if strstr .path "/admin/node/node"}} class="active" {{end}}><a href="/admin/node/node"><i class="fa fa-bandcamp" aria-hidden="true"></i> 权限管理</a></li>
-            <li><a href="#"><i class="fa fa-bandcamp" aria-hidden="true"></i> 管理员列表</a></li>
+            <li {{if strstr .path "/admin/node/user"}} class="active" {{end}}><a href="/admin/node/user"><i class="fa fa-bandcamp" aria-hidden="true"></i> 用户权限</a></li>
         </ul>
     </li>
 

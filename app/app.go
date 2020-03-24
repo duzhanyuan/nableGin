@@ -52,6 +52,7 @@ func RunGin(port int) {
 	//注册路由
 	registerRouter(app)
 
+	//启动HTTP
 	srv := &http.Server{
 		Addr:    ":"+strconv.Itoa(port),
 		Handler: app,

@@ -3,6 +3,7 @@ package dao
 import (
 	"nable.gin/app/models"
 	"nable.gin/libraries/db"
+	//"nable.gin/libraries/casbin"
 )
 
 
@@ -55,8 +56,19 @@ func GetRoleById(Id int) (role models.Role, err error) {
 // 根据ID查询角色 并插入中间表设置权限
 func RoleInsertNodeId(roleId int,nodeId int) (err error) {
 
-	db := db.GetMysql()
+	db := db.GetMysql() //获取mysql连接
+	//e := casbin.InitCasbinMysql() //获取CASBIN的连接
 
+	//根据权限nodeId查出权限的菜单地址和动作
+	//type roleResult struct {
+	//	Url          string
+	//	RouteName    string
+	//}
+	//var result roleResult
+	//db.Table("roles").Select("url, route_name").Where("id = ?", nodeId).Scan(&result)
+	//
+
+	//将角色对应的权限入库
 	var role models.Role
 	db.Preload("Node").First(&role, "id = ?", roleId)
 	res := db.Model(&role).Association("Node").Append(&models.Node{ID: nodeId})

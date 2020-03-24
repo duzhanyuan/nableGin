@@ -5,7 +5,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v2"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	. "nable.gin/config"
+	"nable.gin/config"
 )
 //
 ////
@@ -24,7 +24,7 @@ import (
 ////持久化到数据库
 func InitCasbinMysql() *casbin.Enforcer {
 
-	a, err := gormadapter.NewAdapter("mysql", Conf.MysqlDsn, true) //你的驱动和数据源
+	a, err := gormadapter.NewAdapter("mysql", config.Conf.MysqlDsn, true) //你的驱动和数据源
 	if err != nil {
 		log.Fatalf("gormadapter.NewAdapter error:%v", err)
 	}
