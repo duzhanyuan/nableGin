@@ -11,3 +11,5 @@
 4、go env -w GOPROXY=https://goproxy.cn,direct
 
 5、go run main.go
+
+6、http://localhost:8088/admin/login/    admin   123456
