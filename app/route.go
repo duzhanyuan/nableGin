@@ -88,7 +88,7 @@ func registerRouter(router *gin.Engine) {
 		node.POST("/roleunchecked", controllers.Roleunchecked)//角色删除权限
 
 		node.GET("/user", controllers.UserNodeSet)//用户角色权限设置
-		
+
 	}
 
 
