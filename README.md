@@ -1,4 +1,4 @@
-# nableGin
+# nableGin Install
 
 1、git clone https://github.com/kokobing/nableGin.git
 
