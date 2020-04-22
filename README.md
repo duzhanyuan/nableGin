@@ -14,6 +14,20 @@
 
 6、http://localhost:8088/admin/login/    admin   123456
 
+
+First bulid you need open nableGin/app/route.go 18-25 for casbin permit :
+
+	e.LoadPolicy()
+	e.AddPolicy("anonymous", "/admin", "GET")
+	e.AddPolicy("anonymous", "/admin/login/", "GET")
+	e.AddPolicy("anonymous", "/admin/login/", "POST")
+	e.AddPolicy("admin", "/*", "*")
+	if err := e.SavePolicy(); err != nil {
+		panic(err)
+	}
+
+
+
 # Screenshot
 
 ![](https://github.com/Kokolpb/PHP-WEBSITE-TEMPLATE-L1/blob/master/Screenshot_1.png)  
